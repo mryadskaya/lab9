@@ -28,7 +28,7 @@ if __name__ == '__main__':
                 # Запросить данные о работнике.
                 name = input("Фамилия и имя? ")
                 zodiac = input("Знак зодиака? ")
-                date = input("дата рождения? ")
+                date = int(input("дата рождения? "))
 
                 # Создать словарь.
                 i = {'name': name, 'zodiac': zodiac, 'data': date}

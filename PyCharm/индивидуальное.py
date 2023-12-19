@@ -57,7 +57,7 @@ if __name__ == '__main__':
                             idx,
                             i.get('name', ''),
                             i.get('zodiac', ''),
-                            i.get('data', '')
+                            i.get('data', '0')
                         )
                     )
                 print(line)

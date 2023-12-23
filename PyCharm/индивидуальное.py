@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-# -*- coding: utf-8 -*-
+# -*- coding: utf-8 -*
 
 import sys
 
@@ -7,87 +7,94 @@ if __name__ == '__main__':
     print("Список команд:\n")
     print("add - добавить информацию;")
     print("list - вывести список ;")
-    print("select <тип> - вывод на экран фамилия, имя; знак Зодиака; дата рождения ")
+    print(
+        "select <тип> - вывод на экран фамилия, имя; знак Зодиака; дата рождения ")
     print("help - отобразить справку;")
     print("exit - завершить работу с программой.")
-
     # Список работников.
-    birthday = []
+    workers = []
 
     # Организовать бесконечный цикл запроса команд.
     while True:
         # Запросить команду из терминала.
         command = input(">>> ").lower()
-
         # Выполнить действие в соответствие с командой.
-        match command:
-            case 'exit':
-                break
 
-            case 'add':
-                # Запросить данные о работнике.
-                name = input("Фамилия и имя? ")
-                zodiac = input("Знак зодиака? ")
-                date = int(input("дата рождения? "))
+        if command == 'exit':
+            break
 
-                # Создать словарь.
-                i = {'name': name, 'zodiac': zodiac, 'data': date}
+        elif command == 'add':
+        # Запросить данные о работнике.
+            name = input("Фамилия и инициалы? ")
+            post = input("знак зодиака? ")
+            year = int(input("Год поступления? "))
 
-                # Добавить словарь в список.
-                birthday.append(i)
+            # Создать словарь.
+            worker = {'name': name, 'знак зодиака': post, 'year': year}
 
-                # Отсортировать список в случае необходимости.
-                if len(birthday) > 1:
-                    birthday.sort(key=lambda item: item.get('data', ''))
+            # Добавить словарь в список.
+            workers.append(worker)
 
-            case 'list':
-                # Заголовок таблицы.
-                line = '+-{}-+-{}-+-{}-+-{}-+'.format(
-                    '-' * 4,
-                    '-' * 30,
-                    '-' * 20,
-                    '-' * 8
-                )
-                print(line)
+            # Отсортировать список в случае необходимости.
+            if len(workers) > 1:
+                workers.sort(key=lambda item: item.get('name', ''))
 
-                # Вывести данные о всех сотрудниках.
-                for idx, i in enumerate(birthday, 1):
-                    print(
-                        '| {:>4} | {:<30} | {:<20} | {:>8} |'.format(
-                            idx,
-                            i.get('name', ''),
-                            i.get('zodiac', ''),
-                            i.get('data', '0')
-                        )
-                    )
-                print(line)
+        elif command == 'list':
+            # Заголовок таблицы.
+            line = '+-{}-+-{}-+-{}-+-{}-+'.format(
+            '-' * 4,
+            '-' * 30,
+            '-' * 20,
+            '-' * 8
+            )
+            print(line)
 
-            case 'select ':
-                # Разбить команду на части для выделения номера года.
-                parts = input("Введите значение: ")
-
-                # Проверить сведения работников из списка.
-                count = 0
-                for i in birthday:
-                    for k, v in i.items():
-                        if v == parts:
-                            print("фамилия и имя - ", i["name"])
-                            print("знак зодиака - ", i["zodiac"])
-                            count += 1
-
-                # Если счетчик равен 0, то работники не найдены.
-                if count == 0:
-                    print("информация не найдена.")
-
-            case 'help':
-                # Вывести справку о работе с программой.
-                print("Список команд:\n")
-                print("add - добавить информацию;")
-                print("list - вывести список ;")
+            # Вывести данные о всех сотрудниках.
+            for idx, worker in enumerate(workers, 1):
                 print(
-                    "select <тип> - ввывод на экран фамилия, имя; знак Зодиака; дата рождения")
-                print("help - отобразить справку;")
-                print("exit - завершить работу с программой.")
+                    '| {:>4} | {:<30} | {:<20} | {:>8} |'.format(
+                        idx,
+                        worker.get('name', ''),
+                        worker.get('знак зодиака', ''),
+                        worker.get('year', 0)
+                    )
+            )
+            print(line)
 
-            case _:
-                print(f"Неизвестная команда {command}")
+        elif command.startswith('select '):
+
+            # Получить текущую дату.
+            today = date.today()
+
+            # Разбить команду на части для выделения номера года.
+            parts = command.split(' ', maxsplit=1)
+
+            # Получить требуемый стаж.
+            period = int(parts[1])
+
+            # Инициализировать счетчик.
+            count = 0
+
+            # Проверить сведения работников из списка.
+            for worker in workers:
+                if today.year - worker.get('year', today.year) >= period:
+                    count += 1
+            print(
+                '{:>4}: {}'.format(count, worker.get('name', ''))
+            )
+
+            # Если счетчик равен 0, то работники не найдены.
+            if count == 0:
+                print("информация не найдена.")
+
+        elif command == 'help':
+            # Вывести справку о работе с программой.
+            print("Список команд:\n")
+            print("add - добавить работника;")
+            print("list - вывести список работников;")
+            print("select <стаж> - запросить работников со стажем;")
+            print("help - отобразить справку;")
+            print("exit - завершить работу с программой.")
+
+        else:
+            print(f"Неизвестная команда {command}", file=sys.stderr)
